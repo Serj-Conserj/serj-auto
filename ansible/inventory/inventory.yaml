@@ -1,0 +1,6 @@
+all:
+  hosts:
+    serj_dev:
+      ansible_host: 92.53.107.207
+  vars:
+    ansible_user: root

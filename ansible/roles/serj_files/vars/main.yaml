@@ -1,0 +1,4 @@
+# roles/serj_files/vars/main.yaml
+
+serj_files_united_dir_name: serj
+serj_files_github_key_filename: id_ed25519

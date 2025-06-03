@@ -1,0 +1,7 @@
+# roles/git/tasks/main.yaml
+
+- name: Install Git
+  ansible.builtin.apt:
+    name: git
+    state: latest
+    update_cache: true

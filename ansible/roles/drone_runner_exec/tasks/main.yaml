@@ -1,0 +1,29 @@
+# roles/drone_runner_exec/tasks/main.yaml
+
+- name: Download the runner if not present
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -L https://github.com/drone-runners/drone-runner-exec/releases/download/v1.0.0-beta.10/drone_runner_exec_linux_amd64.tar.gz | tar zx
+    install -t /usr/local/bin drone-runner-exec
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/drone-runner-exec
+
+- name: Config the runner
+  ansible.builtin.copy:
+    src: config
+    dest: /etc/drone-runner-exec/
+    mode: '600'
+
+- name: Create logging directory
+  ansible.builtin.file:
+    path: /var/log/drone-runner-exec
+    state: directory
+    mode: '755'
+
+- name: Install the service if not present
+  ansible.builtin.command: drone-runner-exec service install
+  when: "not 'drone-runner-exec.service' in ansible_facts.services" # From 'common'
+
+- name: Start drone-runner-exec service
+  ansible.builtin.command: drone-runner-exec service start

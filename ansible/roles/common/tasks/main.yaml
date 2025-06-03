@@ -1,0 +1,17 @@
+# roles/common/tasks/main.yaml
+
+- name: Apt prerequisites
+  ansible.builtin.shell: |
+    apt-get update
+    echo ""
+    apt-get autoclean
+    echo ""
+    apt-get check
+  register: apt_status
+
+- name: Print apt_status
+  ansible.builtin.debug:
+    msg: "{{ apt_status.stdout_lines }}"
+
+- name: Gather services facts
+  ansible.builtin.service_facts:

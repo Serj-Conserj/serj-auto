@@ -1,0 +1,61 @@
+# roles/serj_files/tasks/main.yaml
+
+- name: Copy private personal GitHub key to the server
+  ansible.builtin.copy:
+    src: "{{ serj_files_github_key_filename }}" # Using Maksim's personal key for now
+    dest: /root/.ssh/
+    mode: '600' # For priv. ssh keys
+
+# - name: Test ssh
+#   command: ssh -T git@github.com
+#   register: ssh_debug
+
+# - name: Print "Test ssh" status
+#   debug:
+#     msg: "{{ ssh_debug.stdout_lines }}"
+
+# To it before creating folders as "dest:" requires an empty directory.
+# Other repos are included in .gitignore of the service repo.
+- name: Clone service repository if not exists
+  ansible.builtin.git:
+    accept_newhostkey: true
+    clone: true
+    dest: "/root/{{ serj_files_united_dir_name }}/"
+    key_file: "/root/.ssh/{{ serj_files_github_key_filename }}"
+    repo: "ssh://git@github.com/Serj-Conserj/serj-service"
+    single_branch: true
+    version: "{{ serj_files_required_branch }}"
+    update: true
+
+- name: Create the united directory and subdirs for repos if not exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0775'
+  loop:
+    - "/root/{{ serj_files_united_dir_name }}"
+    - "/root/{{ serj_files_united_dir_name }}/serj-back"
+    - "/root/{{ serj_files_united_dir_name }}/serj-consumer"
+    - "/root/{{ serj_files_united_dir_name }}/serj-front"
+    - "/root/{{ serj_files_united_dir_name }}/serj-bot"
+    - "/root/{{ serj_files_united_dir_name }}/serj-calling"
+    - "/root/{{ serj_files_united_dir_name }}/serj-ml"
+
+# TODO: Solve non-convensional ssh key names issue (add 'config' file)
+- name: Clone the repositories (leading branches only) if not exist
+  ansible.builtin.git:
+    accept_newhostkey: true
+    clone: true
+    dest: "/root/{{ serj_files_united_dir_name }}/{{ item }}"
+    key_file: "/root/.ssh/{{ serj_files_github_key_filename }}"
+    repo: "ssh://git@github.com/Serj-Conserj/{{ item }}"
+    single_branch: true
+    version: "{{ serj_files_required_branch }}"
+    update: true
+  loop:
+    - serj-back
+    - serj-consumer
+    - serj-front
+    - serj-bot
+    - serj-calling
+    - serj-ml

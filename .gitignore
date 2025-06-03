@@ -1,0 +1,19 @@
+# IDE files
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Ansible
+.ansible/
+.ansible-lint
+ansible/roles/drone_runner_exec/files/config
+ansible/roles/serj_files/files/id_ed25519
+
+# Terraform
+.terraform/
+terraform/terraform.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.*
+terraform/outputs.tf
+tfplan

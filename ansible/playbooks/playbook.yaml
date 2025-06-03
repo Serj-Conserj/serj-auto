@@ -1,0 +1,19 @@
+# playbooks/playbook.yaml
+
+- name: Set up servers
+  hosts: all
+  become: true # Act as root user
+  roles:
+    - common
+    - delete_apache
+    - git
+    - docker
+    - drone_runner_exec
+
+- name: Copy files for Dev
+  hosts: serj_dev
+  become: true
+  roles:
+    - role: serj_files
+      vars:
+        serj_files_required_branch: develop
