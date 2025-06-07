@@ -39,7 +39,6 @@
     - "/root/{{ serj_files_united_dir_name }}/serj-front"
     - "/root/{{ serj_files_united_dir_name }}/serj-bot"
     - "/root/{{ serj_files_united_dir_name }}/serj-calling"
-    - "/root/{{ serj_files_united_dir_name }}/serj-ml"
 
 # TODO: Solve non-convensional ssh key names issue (add 'config' file)
 - name: Clone the repositories (leading branches only) if not exist
@@ -58,4 +57,3 @@
     - serj-front
     - serj-bot
     - serj-calling
-    - serj-ml
